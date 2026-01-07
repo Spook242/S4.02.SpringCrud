@@ -29,30 +29,27 @@ class FruitControllerTest {
 
     @Test
     void addFruit_ShouldReturn201_WhenDataIsValid() throws Exception {
-        // GIVEN: Una fruta válida
-        Fruit newFruit = new Fruit(null, "Manzana", 5);
-        Fruit savedFruit = new Fruit(1L, "Manzana", 5);
+        Fruit newFruit = new Fruit(null, "Apple", 5);
+        Fruit savedFruit = new Fruit(1L, "Apple", 5);
 
         when(fruitService.save(any(Fruit.class))).thenReturn(savedFruit);
 
         mockMvc.perform(post("/fruits/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newFruit)))
-                .andExpect(status().isCreated()) // Esperamos un 201 Created
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Manzana"))
+                .andExpect(jsonPath("$.name").value("Apple"))
                 .andExpect(jsonPath("$.weightInKilos").value(5));
     }
 
     @Test
     void addFruit_ShouldReturn400_WhenDataIsInvalid() throws Exception {
-        // GIVEN: Una fruita amb dades incorrectes (nom buit i pes negatiu)
         Fruit invalidFruit = new Fruit(null, "", -5);
 
-        // WHEN & THEN: Esperem un 400 Bad Request
         mockMvc.perform(post("/fruits/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidFruit)))
-                .andExpect(status().isBadRequest()); // <--- Això fallarà ara mateix
+                .andExpect(status().isBadRequest());
     }
 }
