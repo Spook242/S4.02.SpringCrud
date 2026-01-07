@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/fruits")
 public class FruitController {
@@ -22,5 +24,11 @@ public class FruitController {
     public ResponseEntity<Fruit> addFruit(@Valid @RequestBody Fruit fruit) {
         Fruit newFruit = fruitService.save(fruit);
         return ResponseEntity.status(HttpStatus.CREATED).body(newFruit);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Fruit>> getAllFruits() {
+        List<Fruit> fruits = fruitService.getAll();
+        return ResponseEntity.ok(fruits);
     }
 }
