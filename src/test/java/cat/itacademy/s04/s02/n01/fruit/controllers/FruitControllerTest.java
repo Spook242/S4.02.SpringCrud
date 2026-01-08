@@ -1,5 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.controllers;
 
+import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.s02.n01.fruit.services.FruitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,5 +71,26 @@ class FruitControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].name").value("Apple"));
+    }
+
+    @Test
+    void getOneFruit_ShouldReturn200_WhenExists() throws Exception {
+        Fruit existingFruit = new Fruit(1L, "Pear", 5);
+
+        when(fruitService.getOne(1L)).thenReturn(existingFruit);
+
+        mockMvc.perform(get("/fruits/getOne/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Pear"));
+    }
+
+    @Test
+    void getOneFruit_ShouldReturn404_WhenDoesNotExist() throws Exception {
+        when(fruitService.getOne(99L)).thenThrow(new FruitNotFoundException("Fruit not found"));
+
+        mockMvc.perform(get("/fruits/getOne/99")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

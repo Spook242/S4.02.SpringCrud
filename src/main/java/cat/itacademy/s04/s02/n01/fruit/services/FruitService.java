@@ -9,6 +9,8 @@ public interface FruitService {
     Fruit save(Fruit fruit);
 
     List<Fruit> getAll();
+
+    Fruit getOne(Long id);
 }
 
 
