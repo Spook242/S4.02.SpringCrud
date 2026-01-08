@@ -1,18 +1,18 @@
 package cat.itacademy.s04.s02.n01.fruit.services;
 
-import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
+import cat.itacademy.s04.s02.n01.fruit.dto.FruitDTO;
 
 import java.util.List;
 
 public interface FruitService {
 
-    Fruit save(Fruit fruit);
+    FruitDTO save(FruitDTO fruitDTO);
 
-    List<Fruit> getAll();
+    List<FruitDTO> getAll();
 
-    Fruit getOne(Long id);
+    FruitDTO getOne(Long id);
 
-    Fruit update(Fruit fruit);
+    FruitDTO update(FruitDTO fruit);
 
     void delete(Long id);
 }

@@ -1,6 +1,6 @@
 package cat.itacademy.s04.s02.n01.fruit.controllers;
 
-import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
+import cat.itacademy.s04.s02.n01.fruit.dto.FruitDTO;
 import cat.itacademy.s04.s02.n01.fruit.services.FruitService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,15 +20,15 @@ public class FruitController {
     }
 
     @PostMapping
-    public ResponseEntity<Fruit> addFruit(@Valid @RequestBody Fruit fruit) {
-        Fruit newFruit = fruitService.save(fruit);
+    public ResponseEntity<FruitDTO> addFruit(@Valid @RequestBody FruitDTO fruitDTO) {
+        FruitDTO newFruit = fruitService.save(fruitDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newFruit);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Fruit> updateFruit(@PathVariable Long id, @Valid @RequestBody Fruit fruit) {
-        fruit.setId(id);
-        Fruit updatedFruit = fruitService.update(fruit);
+    public ResponseEntity<FruitDTO> updateFruit(@PathVariable Long id, @Valid @RequestBody FruitDTO fruitDTO) {
+        fruitDTO.setId(id);
+        FruitDTO updatedFruit = fruitService.update(fruitDTO);
         return ResponseEntity.ok(updatedFruit);
     }
 
@@ -39,14 +39,12 @@ public class FruitController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Fruit> getFruitById(@PathVariable Long id) {
-        Fruit fruit = fruitService.getOne(id);
-        return ResponseEntity.ok(fruit);
+    public ResponseEntity<FruitDTO> getFruitById(@PathVariable Long id) {
+        return ResponseEntity.ok(fruitService.getOne(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Fruit>> getAllFruits() {
-        List<Fruit> fruits = fruitService.getAll();
-        return ResponseEntity.ok(fruits);
+    public ResponseEntity<List<FruitDTO>> getAllFruits() {
+        return ResponseEntity.ok(fruitService.getAll());
     }
 }
