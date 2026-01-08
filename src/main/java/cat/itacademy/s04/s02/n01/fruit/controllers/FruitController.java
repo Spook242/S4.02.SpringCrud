@@ -19,34 +19,34 @@ public class FruitController {
         this.fruitService = fruitService;
     }
 
-
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Fruit> addFruit(@Valid @RequestBody Fruit fruit) {
         Fruit newFruit = fruitService.save(fruit);
         return ResponseEntity.status(HttpStatus.CREATED).body(newFruit);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Fruit>> getAllFruits() {
-        List<Fruit> fruits = fruitService.getAll();
-        return ResponseEntity.ok(fruits);
+    @PutMapping("/{id}")
+    public ResponseEntity<Fruit> updateFruit(@PathVariable Long id, @Valid @RequestBody Fruit fruit) {
+        fruit.setId(id);
+        Fruit updatedFruit = fruitService.update(fruit);
+        return ResponseEntity.ok(updatedFruit);
     }
 
-    @GetMapping("/getOne/{id}")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFruit(@PathVariable Long id) {
+        fruitService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
     public ResponseEntity<Fruit> getFruitById(@PathVariable Long id) {
         Fruit fruit = fruitService.getOne(id);
         return ResponseEntity.ok(fruit);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Fruit> updateFruit(@Valid @RequestBody Fruit fruit) {
-        Fruit updatedFruit = fruitService.update(fruit);
-        return ResponseEntity.ok(updatedFruit);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteFruit(@PathVariable Long id) {
-        fruitService.delete(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<Fruit>> getAllFruits() {
+        List<Fruit> fruits = fruitService.getAll();
+        return ResponseEntity.ok(fruits);
     }
 }
