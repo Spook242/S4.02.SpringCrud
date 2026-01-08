@@ -31,4 +31,22 @@ public class FruitServiceImpl implements FruitService {
         return fruitRepository.findById(id)
                 .orElseThrow(() -> new FruitNotFoundException("Fruit not found with id: " + id));
     }
+
+    @Override
+    public Fruit update(Fruit fruit) {
+        if (fruit.getId() == null || !fruitRepository.existsById(fruit.getId())) {
+            throw new FruitNotFoundException("Cannot be updated. Fruit not found with id: " + fruit.getId());
+        }
+
+        return fruitRepository.save(fruit);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!fruitRepository.existsById(id)) {
+            throw new FruitNotFoundException("Cannot be removed. Fruit not found with id: " + id);
+        }
+        fruitRepository.deleteById(id);
+    }
+
 }

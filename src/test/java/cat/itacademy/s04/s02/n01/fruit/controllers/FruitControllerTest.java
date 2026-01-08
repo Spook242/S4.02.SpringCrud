@@ -15,8 +15,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FruitController.class)
@@ -92,5 +91,26 @@ class FruitControllerTest {
         mockMvc.perform(get("/fruits/getOne/99")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateFruit_ShouldReturn200_WhenExists() throws Exception {
+        Fruit fruitToUpdate = new Fruit(1L, "Modified Apple", 12);
+
+        when(fruitService.update(any(Fruit.class))).thenReturn(fruitToUpdate);
+
+        mockMvc.perform(put("/fruits/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(fruitToUpdate)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Modified Apple"))
+                .andExpect(jsonPath("$.weightInKilos").value(12));
+    }
+
+    @Test
+    void deleteFruit_ShouldReturn204_WhenExists() throws Exception {
+
+        mockMvc.perform(delete("/fruits/delete/1"))
+                .andExpect(status().isNoContent());
     }
 }

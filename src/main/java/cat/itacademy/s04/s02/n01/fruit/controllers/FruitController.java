@@ -37,4 +37,16 @@ public class FruitController {
         Fruit fruit = fruitService.getOne(id);
         return ResponseEntity.ok(fruit);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Fruit> updateFruit(@Valid @RequestBody Fruit fruit) {
+        Fruit updatedFruit = fruitService.update(fruit);
+        return ResponseEntity.ok(updatedFruit);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteFruit(@PathVariable Long id) {
+        fruitService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
