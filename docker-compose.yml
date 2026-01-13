@@ -1,0 +1,31 @@
+services:
+  # --- SERVEI DE BASE DE DADES ---
+  mysql-db:
+    image: mysql:latest
+    container_name: mysql-compose-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: fruit_db_n2
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  # --- SERVEI DE L'APLICACIÓ ---
+  fruit-api:
+    build: .
+    container_name: fruit-api-compose
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/fruit_db_n2?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - mysql-db  # Només espera que arrenqui, sense comprovacions complexes
+    restart: on-failure # Si falla al principi, ho torna a intentar fins que funcioni
+
+volumes:
+  mysql_data:
