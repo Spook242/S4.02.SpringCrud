@@ -72,8 +72,16 @@ public class FruitServiceImpl implements FruitService {
     }
 
     @Override
-    public List<FruitDTO> getAll() {
-        return fruitRepository.findAll().stream()
+    public List<FruitDTO> getAll(Long providerId) {
+        List<Fruit> fruits;
+
+        if (providerId != null) {
+            fruits = fruitRepository.findByProviderId(providerId);
+        } else {
+            fruits = fruitRepository.findAll();
+        }
+
+        return fruits.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }

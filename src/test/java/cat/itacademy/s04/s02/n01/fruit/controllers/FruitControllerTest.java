@@ -77,7 +77,7 @@ class FruitControllerTest {
                 new FruitDTO(2L, "Pear", 5, 1L)
         );
 
-        when(fruitService.getAll()).thenReturn(fruits);
+        when(fruitService.getAll(null)).thenReturn(fruits);
 
         mockMvc.perform(get("/fruits"))
                 .andExpect(status().isOk())
@@ -90,5 +90,20 @@ class FruitControllerTest {
 
         mockMvc.perform(delete("/fruits/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getAllFruits_ShouldFilterByProvider_WhenParamExists() throws Exception {
+        List<FruitDTO> filteredFruits = List.of(
+                new FruitDTO(1L, "Catalonian Banana", 10, 5L)
+        );
+
+        when(fruitService.getAll(5L)).thenReturn(filteredFruits);
+
+        mockMvc.perform(get("/fruits")
+                        .param("providerId", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].providerId").value(5));
     }
 }

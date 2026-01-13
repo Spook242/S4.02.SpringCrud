@@ -137,9 +137,9 @@ class FruitServiceTest {
         );
         when(fruitRepository.findAll()).thenReturn(fruits);
 
-        List<FruitDTO> result = fruitService.getAll();
+        List<FruitDTO> result = fruitService.getAll(null);
 
         assertEquals(2, result.size());
-        assertEquals("A", result.get(0).getName());
+        assertEquals("A", result.getFirst().getName());
     }
 }

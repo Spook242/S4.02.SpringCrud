@@ -47,7 +47,7 @@ public class FruitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FruitDTO>> getAll() {
-        return ResponseEntity.ok(fruitService.getAll());
+    public ResponseEntity<List<FruitDTO>> getAll(@RequestParam(required = false) Long providerId) {
+        return ResponseEntity.ok(fruitService.getAll(providerId));
     }
 }

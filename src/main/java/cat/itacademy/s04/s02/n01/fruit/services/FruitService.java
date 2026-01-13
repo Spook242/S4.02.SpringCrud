@@ -12,7 +12,7 @@ public interface FruitService {
 
     FruitDTO getOne(int id);
 
-    List<FruitDTO> getAll();
+    List<FruitDTO> getAll(Long providerId);
 
     FruitDTO getOne(Long id);
 
