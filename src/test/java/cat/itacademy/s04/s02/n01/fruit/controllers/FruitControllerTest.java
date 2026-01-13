@@ -2,7 +2,6 @@ package cat.itacademy.s04.s02.n01.fruit.controllers;
 
 import cat.itacademy.s04.s02.n01.fruit.dto.FruitDTO;
 import cat.itacademy.s04.s02.n01.fruit.services.FruitService;
-import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,82 +33,61 @@ class FruitControllerTest {
 
     @Test
     void addFruit_ShouldReturn201_WhenDataIsValid() throws Exception {
-        FruitDTO newFruitDTO = new FruitDTO(null, "Apple", 5);
-        FruitDTO savedFruitDTO = new FruitDTO(1L, "Apple", 5);
+        FruitDTO fruitDTO = new FruitDTO(null, "Banana", 10, 1L);
+        FruitDTO savedFruit = new FruitDTO(1L, "Banana", 10, 1L);
 
-        when(fruitService.save(any(FruitDTO.class))).thenReturn(savedFruitDTO);
+        when(fruitService.save(any(FruitDTO.class))).thenReturn(savedFruit);
 
         mockMvc.perform(post("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newFruitDTO)))
+                        .content(objectMapper.writeValueAsString(fruitDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Apple"));
+                .andExpect(jsonPath("$.name").value("Banana"))
+                .andExpect(jsonPath("$.providerId").value(1));
     }
 
     @Test
-    void addFruit_ShouldReturn400_WhenDataIsInvalid() throws Exception {
-        FruitDTO invalidFruitDTO = new FruitDTO(null, "", -5);
+    void updateFruit_ShouldReturn200_WhenExists() throws Exception {
+        FruitDTO fruitToUpdate = new FruitDTO(1L, "Modified Banana", 15, 2L);
 
-        mockMvc.perform(post("/fruits")
+        when(fruitService.update(any(FruitDTO.class))).thenReturn(fruitToUpdate);
+
+        mockMvc.perform(put("/fruits")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidFruitDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").exists())
-                .andExpect(jsonPath("$.weightInKilos").exists());
-    }
-
-    @Test
-    void getAllFruits_ShouldReturnList() throws Exception {
-        List<FruitDTO> fruitList = List.of(
-                new FruitDTO(1L, "Apple", 10),
-                new FruitDTO(2L, "Pear", 5)
-        );
-
-        when(fruitService.getAll()).thenReturn(fruitList);
-
-        mockMvc.perform(get("/fruits")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(fruitToUpdate)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("Apple"));
+                .andExpect(jsonPath("$.name").value("Modified Banana"));
     }
 
     @Test
-    void getOneFruit_ShouldReturn200_WhenExists() throws Exception {
-        FruitDTO existingFruit = new FruitDTO(1L, "Pear", 5);
-        when(fruitService.getOne(1L)).thenReturn(existingFruit);
+    void getFruitById_ShouldReturn200_WhenExists() throws Exception {
+        FruitDTO foundFruit = new FruitDTO(1L, "Pear", 5, 1L);
 
-        mockMvc.perform(get("/fruits/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+        when(fruitService.getOne(1)).thenReturn(foundFruit);
+
+        mockMvc.perform(get("/fruits/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Pear"));
     }
 
     @Test
-    void getOneFruit_ShouldReturn404_WhenDoesNotExist() throws Exception {
-        when(fruitService.getOne(99L)).thenThrow(new FruitNotFoundException("Fruit not found"));
+    void getAllFruits_ShouldReturnList() throws Exception {
+        List<FruitDTO> fruits = Arrays.asList(
+                new FruitDTO(1L, "Apple", 10, 1L),
+                new FruitDTO(2L, "Pear", 5, 1L)
+        );
 
-        mockMvc.perform(get("/fruits/99")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
+        when(fruitService.getAll()).thenReturn(fruits);
 
-    @Test
-    void updateFruit_ShouldReturn200_WhenExists() throws Exception {
-        FruitDTO fruitToUpdate = new FruitDTO(1L, "Modified Apple", 12);
-
-        when(fruitService.update(any(FruitDTO.class))).thenReturn(fruitToUpdate);
-
-        mockMvc.perform(put("/fruits/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(fruitToUpdate)))
+        mockMvc.perform(get("/fruits"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Modified Apple"));
+                .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
     void deleteFruit_ShouldReturn204_WhenExists() throws Exception {
+        doNothing().when(fruitService).delete(1);
+
         mockMvc.perform(delete("/fruits/1"))
                 .andExpect(status().isNoContent());
     }

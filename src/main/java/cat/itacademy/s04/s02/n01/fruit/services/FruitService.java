@@ -8,6 +8,10 @@ public interface FruitService {
 
     FruitDTO save(FruitDTO fruitDTO);
 
+    void delete(int id);
+
+    FruitDTO getOne(int id);
+
     List<FruitDTO> getAll();
 
     FruitDTO getOne(Long id);
