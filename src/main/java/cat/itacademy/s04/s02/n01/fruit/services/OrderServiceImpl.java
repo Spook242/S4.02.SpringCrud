@@ -6,6 +6,7 @@ import cat.itacademy.s04.s02.n01.fruit.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,5 +39,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        // ¡IMPORTANTE! Debe llamar al repositorio, NO devolver null ni lista vacía a mano.
+        return orderRepository.findAll();
     }
 }
