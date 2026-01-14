@@ -1,31 +1,39 @@
 services:
-  # --- SERVEI DE BASE DE DADES ---
+  # --- SERVEI 1: MySQL ---
   mysql-db:
     image: mysql:latest
-    container_name: mysql-compose-db
-    ports:
-      - "3308:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: fruit_db_n2
-    volumes:
-      - mysql_data:/var/lib/mysql
+    # ... resto de configuración ...
     restart: always
 
-  # --- SERVEI DE L'APLICACIÓ ---
+  # --- SERVEI 2: MongoDB (Fíjate: alineado con mysql-db) ---
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-db-fruit
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+  # --- SERVEI 3: La teva API ---
   fruit-api:
     build: .
     container_name: fruit-api-compose
     ports:
       - "8080:8080"
     environment:
+      # Config MySQL
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/fruit_db_n2?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # Config MongoDB (¡Nueva!)
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/fruit_orders_db
     depends_on:
-      - mysql-db  # Només espera que arrenqui, sense comprovacions complexes
-    restart: on-failure # Si falla al principi, ho torna a intentar fins que funcioni
+      - mysql-db
+      - mongodb  # ¡Añade esto también!
 
+# VOLÚMENES (Al final del archivo, sin indentar)
 volumes:
   mysql_data:
+  mongo_data:
