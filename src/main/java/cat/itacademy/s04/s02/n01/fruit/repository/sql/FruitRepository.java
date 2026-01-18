@@ -1,4 +1,4 @@
-package cat.itacademy.s04.s02.n01.fruit.repository;
+package cat.itacademy.s04.s02.n01.fruit.repository.sql;
 
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import org.springframework.data.jpa.repository.JpaRepository;

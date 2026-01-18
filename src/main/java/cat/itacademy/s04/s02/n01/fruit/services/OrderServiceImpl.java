@@ -2,11 +2,12 @@ package cat.itacademy.s04.s02.n01.fruit.services;
 
 import cat.itacademy.s04.s02.n01.fruit.domain.Order;
 import cat.itacademy.s04.s02.n01.fruit.domain.OrderLine;
-import cat.itacademy.s04.s02.n01.fruit.repository.OrderRepository;
+import cat.itacademy.s04.s02.n01.fruit.repository.mongo.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -43,7 +44,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        // ¡IMPORTANTE! Debe llamar al repositorio, NO devolver null ni lista vacía a mano.
         return orderRepository.findAll();
+    }
+
+    @Override
+    public Optional<Order> getOrderById(String id) {
+        return orderRepository.findById(id);
     }
 }

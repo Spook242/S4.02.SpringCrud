@@ -4,8 +4,8 @@ import cat.itacademy.s04.s02.n01.fruit.dto.FruitDTO;
 import cat.itacademy.s04.s02.n01.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.s02.n01.fruit.model.Fruit;
 import cat.itacademy.s04.s02.n01.fruit.model.Provider;
-import cat.itacademy.s04.s02.n01.fruit.repository.FruitRepository;
-import cat.itacademy.s04.s02.n01.fruit.repository.ProviderRepository;
+import cat.itacademy.s04.s02.n01.fruit.repository.sql.FruitRepository;
+import cat.itacademy.s04.s02.n01.fruit.repository.sql.ProviderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

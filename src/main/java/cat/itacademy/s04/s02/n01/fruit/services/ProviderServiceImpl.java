@@ -2,7 +2,7 @@ package cat.itacademy.s04.s02.n01.fruit.services;
 
 import cat.itacademy.s04.s02.n01.fruit.dto.ProviderDTO;
 import cat.itacademy.s04.s02.n01.fruit.model.Provider;
-import cat.itacademy.s04.s02.n01.fruit.repository.ProviderRepository;
+import cat.itacademy.s04.s02.n01.fruit.repository.sql.ProviderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

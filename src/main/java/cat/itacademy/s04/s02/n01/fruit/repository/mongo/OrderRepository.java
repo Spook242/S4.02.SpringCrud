@@ -1,4 +1,4 @@
-package cat.itacademy.s04.s02.n01.fruit.repository;
+package cat.itacademy.s04.s02.n01.fruit.repository.mongo;
 
 import cat.itacademy.s04.s02.n01.fruit.domain.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;

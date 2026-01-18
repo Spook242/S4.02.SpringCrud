@@ -3,7 +3,11 @@ package cat.itacademy.s04.s02.n01.fruit.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class FruitDTO {
 
     private Long id;
@@ -27,31 +31,4 @@ public class FruitDTO {
         this.providerId = providerId;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getWeightInKilos() {
-        return weightInKilos;
-    }
-    public void setWeightInKilos(int weightInKilos) {
-        this.weightInKilos = weightInKilos;
-    }
-
-    public Long getProviderId() {
-        return providerId;
-    }
-    public void setProviderId(Long providerId) {
-        this.providerId = providerId;
-    }
 }

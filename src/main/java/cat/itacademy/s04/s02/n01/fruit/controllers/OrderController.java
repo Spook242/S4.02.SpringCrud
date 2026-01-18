@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
@@ -18,28 +19,31 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // --- TASK 1: Crear Comanda (POST) ---
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         try {
             Order savedOrder = orderService.createOrder(order);
-            return new ResponseEntity<>(savedOrder, HttpStatus.CREATED); // 201 Created
+            return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            // Captura errores de validación (fechas pasadas, sin frutas, etc.)
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // 400 Bad Request
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // --- TASK 2: Listar Comandes (GET) ---
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
 
-        // Si la lista está vacía, devuelve [] con 200 OK
         if (orders.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Opcional: 204 No Content si prefieres
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(orders, HttpStatus.OK); // 200 OK
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Order> getOrderById(@PathVariable String id) {
+        Optional<Order> order = orderService.getOrderById(id);
+
+        return order.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
