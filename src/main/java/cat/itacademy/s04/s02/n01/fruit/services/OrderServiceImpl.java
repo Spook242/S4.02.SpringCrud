@@ -51,4 +51,15 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Order> getOrderById(String id) {
         return orderRepository.findById(id);
     }
+
+    @Override
+    public Order updateOrder(String id, Order newOrderData) {
+        return orderRepository.findById(id).map(existingOrder -> {
+            existingOrder.setClientName(newOrderData.getClientName());
+            existingOrder.setDeliveryDate(newOrderData.getDeliveryDate());
+            existingOrder.setOrderLines(newOrderData.getOrderLines());
+
+            return orderRepository.save(existingOrder);
+        }).orElse(null);
+    }
 }

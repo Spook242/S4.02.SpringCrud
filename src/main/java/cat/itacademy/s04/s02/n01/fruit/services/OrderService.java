@@ -9,4 +9,6 @@ public interface OrderService {
     Order createOrder(Order order);
     List<Order> getAllOrders();
     Optional<Order> getOrderById(String id);
+    Order updateOrder(String id, Order order);
+
 }

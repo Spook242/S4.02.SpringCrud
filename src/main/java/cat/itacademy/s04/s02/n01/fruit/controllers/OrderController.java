@@ -46,4 +46,16 @@ public class OrderController {
 
         return order.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order) {
+
+        Order updatedOrder = orderService.updateOrder(id, order);
+
+        if (updatedOrder != null) {
+            return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
