@@ -62,4 +62,9 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.save(existingOrder);
         }).orElse(null);
     }
+
+    @Override
+    public void deleteOrder(String id) {
+        orderRepository.deleteById(id);
+    }
 }

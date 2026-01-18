@@ -58,4 +58,17 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteOrder (@PathVariable String id){
+            Optional<Order> order = orderService.getOrderById(id);
+
+            if (order.isPresent()) {
+                orderService.deleteOrder(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+    }
+

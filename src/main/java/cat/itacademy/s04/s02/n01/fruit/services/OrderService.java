@@ -10,5 +10,5 @@ public interface OrderService {
     List<Order> getAllOrders();
     Optional<Order> getOrderById(String id);
     Order updateOrder(String id, Order order);
-
+    void deleteOrder(String id);
 }
